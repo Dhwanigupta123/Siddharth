@@ -3,67 +3,96 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>I Love You 💖</title>
+<title>I Love You</title>
+
 <style>
   body {
     margin: 0;
-    background-color: #ffe6e6;
+    background: #ffe6e6;
     overflow: hidden;
-    font-family: Arial, sans-serif;
+    font-family: Arial;
+  }
+
+  /* Floating chat icon */
+  #chatIcon {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #ff0066;
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
     display: flex;
-    justify-content: center;
     align-items: center;
-    height: 100vh;
-    flex-direction: column;
+    justify-content: center;
+    font-size: 28px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    z-index: 1000;
+  }
+
+  /* Love message */
+  #loveMessage {
+    position: fixed;
+    bottom: 110px;
+    right: 30px;
+    background: white;
+    padding: 20px 25px;
+    border-radius: 18px;
+    box-shadow: 0 0 12px rgba(0,0,0,0.2);
+    font-size: 22px;
+    color: #ff0066;
+    display: none;
   }
 
   .heart {
     position: absolute;
     font-size: 2rem;
     color: red;
-    animation: float 3s linear infinite;
+    animation: float 3s linear forwards;
   }
 
   @keyframes float {
-    0% { transform: translateY(0) scale(0.5); opacity: 0.8; }
-    50% { opacity: 1; }
+    0% { transform: translateY(0) scale(0.6); opacity: 1; }
     100% { transform: translateY(-100vh) scale(1); opacity: 0; }
-  }
-
-  h1 {
-    position: absolute;
-    bottom: 50px;
-    color: #ff0066;
-    font-size: 2.5rem;
-    animation: blink 1s infinite;
-  }
-
-  @keyframes blink {
-    0%, 50%, 100% { opacity: 1; }
-    25%, 75% { opacity: 0.5; }
   }
 </style>
 </head>
+
 <body>
 
-<h1>I Love You 💖</h1>
+<div id="chatIcon">💬</div>
+<div id="loveMessage">I Love You 💖</div>
 
 <script>
+  let heartsInterval;
+  let isOpen = false;
+
   function createHeart() {
     const heart = document.createElement('div');
     heart.classList.add('heart');
     heart.textContent = '💖';
     heart.style.left = Math.random() * window.innerWidth + 'px';
-    heart.style.fontSize = (Math.random() * 40 + 30) + 'px';
+    heart.style.fontSize = (Math.random() * 30 + 20) + 'px';
     document.body.appendChild(heart);
 
-    setTimeout(() => {
-      heart.remove();
-    }, 3000); // remove after animation
+    setTimeout(() => heart.remove(), 3000);
   }
 
-  // create hearts continuously
-  setInterval(createHeart, 200);
+  document.getElementById("chatIcon").addEventListener("click", () => {
+    const loveMsg = document.getElementById("loveMessage");
+
+    if (!isOpen) {
+      loveMsg.style.display = "block";
+      heartsInterval = setInterval(createHeart, 200);
+      isOpen = true;
+    } else {
+      loveMsg.style.display = "none";
+      clearInterval(heartsInterval);
+      isOpen = false;
+    }
+  });
 </script>
 
 </body>
