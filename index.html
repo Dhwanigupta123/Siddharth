@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>I Love You 💖</title>
+<style>
+  body {
+    margin: 0;
+    background-color: #ffe6e6;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+  }
+
+  .heart {
+    position: absolute;
+    font-size: 2rem;
+    color: red;
+    animation: float 3s linear infinite;
+  }
+
+  @keyframes float {
+    0% { transform: translateY(0) scale(0.5); opacity: 0.8; }
+    50% { opacity: 1; }
+    100% { transform: translateY(-100vh) scale(1); opacity: 0; }
+  }
+
+  h1 {
+    position: absolute;
+    bottom: 50px;
+    color: #ff0066;
+    font-size: 2.5rem;
+    animation: blink 1s infinite;
+  }
+
+  @keyframes blink {
+    0%, 50%, 100% { opacity: 1; }
+    25%, 75% { opacity: 0.5; }
+  }
+</style>
+</head>
+<body>
+
+<h1>I Love You 💖</h1>
+
+<script>
+  function createHeart() {
+    const heart = document.createElement('div');
+    heart.classList.add('heart');
+    heart.textContent = '💖';
+    heart.style.left = Math.random() * window.innerWidth + 'px';
+    heart.style.fontSize = (Math.random() * 30 + 20) + 'px';
+    document.body.appendChild(heart);
+
+    setTimeout(() => {
+      heart.remove();
+    }, 3000); // remove after animation
+  }
+
+  // create hearts continuously
+  setInterval(createHeart, 200);
+</script>
+
+</body>
+</html>
