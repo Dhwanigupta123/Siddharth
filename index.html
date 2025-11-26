@@ -6,11 +6,14 @@
 <title>I Love You</title>
 
 <style>
-  body {
+  /* FORCE page to have height */
+  html, body {
+    height: 100%;
     margin: 0;
+    padding: 0;
     background: #ffe6e6;
     overflow: hidden;
-    font-family: Arial;
+    font-family: Arial, sans-serif;
   }
 
   /* Floating chat icon */
@@ -20,30 +23,31 @@
     right: 30px;
     background: #ff0066;
     color: white;
-    width: 60px;
-    height: 60px;
+    width: 65px;
+    height: 65px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 28px;
+    font-size: 30px;
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    z-index: 1000;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+    z-index: 9999;
   }
 
-  /* Love message */
+  /* Love message popup */
   #loveMessage {
     position: fixed;
     bottom: 110px;
     right: 30px;
     background: white;
-    padding: 20px 25px;
+    padding: 22px 28px;
     border-radius: 18px;
-    box-shadow: 0 0 12px rgba(0,0,0,0.2);
-    font-size: 22px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    font-size: 24px;
     color: #ff0066;
     display: none;
+    z-index: 9999;
   }
 
   .heart {
@@ -54,45 +58,48 @@
   }
 
   @keyframes float {
-    0% { transform: translateY(0) scale(0.6); opacity: 1; }
-    100% { transform: translateY(-100vh) scale(1); opacity: 0; }
+    0% { transform: translateY(0) scale(0.7); opacity: 1; }
+    100% { transform: translateY(-100vh) scale(1.3); opacity: 0; }
   }
 </style>
 </head>
 
 <body>
 
+<!-- CHAT ICON -->
 <div id="chatIcon">💬</div>
+
+<!-- LOVE MESSAGE -->
 <div id="loveMessage">I Love You 💖</div>
 
 <script>
   let heartsInterval;
-  let isOpen = false;
+  let open = false;
 
-  function createHeart() {
-    const heart = document.createElement('div');
-    heart.classList.add('heart');
-    heart.textContent = '💖';
-    heart.style.left = Math.random() * window.innerWidth + 'px';
-    heart.style.fontSize = (Math.random() * 30 + 20) + 'px';
+  function spawnHeart() {
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.textContent = "💖";
+    heart.style.left = Math.random() * window.innerWidth + "px";
+    heart.style.fontSize = (Math.random() * 30 + 25) + "px";
     document.body.appendChild(heart);
 
     setTimeout(() => heart.remove(), 3000);
   }
 
-  document.getElementById("chatIcon").addEventListener("click", () => {
-    const loveMsg = document.getElementById("loveMessage");
+  document.getElementById("chatIcon").onclick = () => {
+    const msg = document.getElementById("loveMessage");
 
-    if (!isOpen) {
-      loveMsg.style.display = "block";
-      heartsInterval = setInterval(createHeart, 200);
-      isOpen = true;
+    if (!open) {
+      msg.style.display = "block";
+      heartsInterval = setInterval(spawnHeart, 200);
+      open = true;
     } else {
-      loveMsg.style.display = "none";
+      msg.style.display = "none";
       clearInterval(heartsInterval);
-      isOpen = false;
+      open = false;
     }
-  });
+  };
 </script>
 
 </body>
