@@ -11,51 +11,71 @@
     margin: 0;
     background: #ffe6e6;
     overflow: hidden;
-    font-family: Arial, sans-serif;
+    font-family: "Poppins", sans-serif;
   }
 
-  /* Floating mail icon */
+  /* Center Mail Icon */
   #mailIcon {
     position: fixed;
-    bottom: 30px;
-    right: 30px;
-    background: #ff0066;
-    color: white;
-    width: 70px;
-    height: 70px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    color: #ff0066;
+    width: 110px;
+    height: 110px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 35px;
+    font-size: 55px;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.25);
     z-index: 9999;
+    animation: pulse 1.3s infinite;
   }
 
-  /* Love message */
+  @keyframes pulse {
+    0% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.1); }
+    100% { transform: translate(-50%, -50%) scale(1); }
+  }
+
+  /* Love text */
   #loveText {
     position: fixed;
-    top: 50%;
+    top: 70%;
     width: 100%;
     text-align: center;
-    transform: translateY(-20px);
-    font-size: 40px;
+    font-size: 45px;
     font-weight: bold;
     color: #ff0066;
     display: none;
-    animation: fadeIn 1.5s forwards;
   }
 
-  @keyframes fadeIn {
-    0% { opacity: 0; transform: translateY(-30px); }
-    100% { opacity: 1; transform: translateY(-20px); }
+  /* Typewriter animation */
+  .type {
+    overflow: hidden;
+    border-right: .15em solid #ff0066;
+    white-space: nowrap;
+    margin: 0 auto;
+    letter-spacing: 2px;
+    animation: typing 3s steps(20), blink .7s infinite;
   }
 
-  /* Floating hearts (full page) */
+  @keyframes typing {
+    from { width: 0; }
+    to { width: 290px; }
+  }
+
+  @keyframes blink {
+    50% { border-color: transparent; }
+  }
+
+  /* Floating hearts (START only after clicking mail) */
   .heart {
     position: absolute;
-    color: red;
+    color: #ff007f;
     font-size: 2rem;
     pointer-events: none;
     animation: floatHeart 4s ease-in-out forwards;
@@ -73,11 +93,11 @@
 <!-- Mail Icon -->
 <div id="mailIcon">📩</div>
 
-<!-- Heart Draw Canvas -->
+<!-- Canvas for drawing the heart -->
 <canvas id="heartCanvas"></canvas>
 
 <!-- Final Message -->
-<div id="loveText">I LOVE YOU 💖</div>
+<div id="loveText"><span class="type">I LOVE YOU 💖</span></div>
 
 <script>
   const canvas = document.getElementById("heartCanvas");
@@ -90,9 +110,9 @@
   resizeCanvas();
   window.onresize = resizeCanvas;
 
-  // Heart drawing animation
   let t = 0;
   let drawing = false;
+  let heartsInterval;
 
   function drawHeart() {
     if (!drawing) return;
@@ -100,28 +120,30 @@
     const x = 16 * Math.sin(t) ** 3;
     const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
 
-    const scale = 15;
+    const scale = 18;
 
     ctx.fillStyle = "#ff0066";
-    ctx.shadowColor = "#ff80aa";
-    ctx.shadowBlur = 20;
+    ctx.shadowColor = "#ff4da6";
+    ctx.shadowBlur = 25;
 
     ctx.fillRect(
       canvas.width / 2 + x * scale,
       canvas.height / 2 + y * scale,
-      4, 4
+      5, 5
     );
 
-    t += 0.05;
+    t += 0.04;
 
     if (t < Math.PI * 2) {
       requestAnimationFrame(drawHeart);
     } else {
-      document.getElementById("loveText").style.display = "block";
+      setTimeout(() => {
+        document.getElementById("loveText").style.display = "block";
+      }, 800);
     }
   }
 
-  // Floating full-page hearts
+  // Floating hearts (start only after clicking)
   function spawnFloatingHeart() {
     const heart = document.createElement("div");
     heart.classList.add("heart");
@@ -139,16 +161,17 @@
     setTimeout(() => heart.remove(), 4000);
   }
 
-  setInterval(spawnFloatingHeart, 200);
-
-  // When mail icon is clicked → start drawing heart
+  // Mail icon click → start animation + hearts
   document.getElementById("mailIcon").onclick = () => {
-    if (!drawing) {
-      drawing = true;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      t = 0;
-      drawHeart();
-    }
+    document.getElementById("mailIcon").style.display = "none"; // hide icon
+
+    drawing = true;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    t = 0;
+    drawHeart();
+
+    // Start hearts after click
+    heartsInterval = setInterval(spawnFloatingHeart, 150);
   };
 </script>
 
