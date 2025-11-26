@@ -3,103 +3,92 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>I Love You</title>
+<title>I Love You 💖</title>
 
 <style>
-  /* FORCE page to have height */
-  html, body {
-    height: 100%;
+  body {
     margin: 0;
-    padding: 0;
     background: #ffe6e6;
     overflow: hidden;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-family: Arial, sans-serif;
   }
 
-  /* Floating chat icon */
-  #chatIcon {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    background: #ff0066;
-    color: white;
-    width: 65px;
-    height: 65px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 30px;
+  /* Mail Icon */
+  #mailIcon {
+    font-size: 80px;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.25);
-    z-index: 9999;
+    animation: pop 1.2s infinite ease-in-out;
   }
 
-  /* Love message popup */
-  #loveMessage {
-    position: fixed;
-    bottom: 110px;
-    right: 30px;
-    background: white;
-    padding: 22px 28px;
-    border-radius: 18px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    font-size: 24px;
-    color: #ff0066;
+  @keyframes pop {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+  }
+
+  /* I Love You Text */
+  #loveText {
     display: none;
-    z-index: 9999;
+    position: absolute;
+    color: #ff0066;
+    font-size: 3rem;
+    font-weight: bold;
+    animation: blink 1s infinite;
   }
 
+  @keyframes blink {
+    0%, 50%, 100% { opacity: 1; }
+    25%, 75% { opacity: 0.4; }
+  }
+
+  /* Floating Hearts */
   .heart {
     position: absolute;
-    font-size: 2rem;
     color: red;
-    animation: float 3s linear forwards;
+    font-size: 20px;
+    animation: floatUp 3s linear infinite;
   }
 
-  @keyframes float {
-    0% { transform: translateY(0) scale(0.7); opacity: 1; }
-    100% { transform: translateY(-100vh) scale(1.3); opacity: 0; }
+  @keyframes floatUp {
+    0% { transform: translateY(0) scale(0.5); opacity: 1; }
+    100% { transform: translateY(-100vh) scale(1.2); opacity: 0; }
   }
 </style>
 </head>
 
 <body>
 
-<!-- CHAT ICON -->
-<div id="chatIcon">💬</div>
+<!-- Mail icon in center -->
+<div id="mailIcon">📩</div>
 
-<!-- LOVE MESSAGE -->
-<div id="loveMessage">I Love You 💖</div>
+<!-- Hidden love text -->
+<div id="loveText">I Love You 💖</div>
 
 <script>
-  let heartsInterval;
-  let open = false;
+  const mail = document.getElementById('mailIcon');
+  const loveText = document.getElementById('loveText');
 
-  function spawnHeart() {
-    const heart = document.createElement("div");
-    heart.classList.add("heart");
-    heart.textContent = "💖";
-    heart.style.left = Math.random() * window.innerWidth + "px";
-    heart.style.fontSize = (Math.random() * 30 + 25) + "px";
-    document.body.appendChild(heart);
+  mail.addEventListener('click', () => {
+    mail.style.display = "none";       // hide the mail icon
+    loveText.style.display = "block";  // show I Love You text
+    startHearts();                     // start floating hearts
+  });
 
-    setTimeout(() => heart.remove(), 3000);
+  function startHearts() {
+    setInterval(() => {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.textContent = '💖';
+      heart.style.left = Math.random() * window.innerWidth + 'px';
+      heart.style.fontSize = (Math.random() * 30 + 20) + 'px';
+      document.body.appendChild(heart);
+
+      setTimeout(() => heart.remove(), 3000);
+    }, 200);
   }
-
-  document.getElementById("chatIcon").onclick = () => {
-    const msg = document.getElementById("loveMessage");
-
-    if (!open) {
-      msg.style.display = "block";
-      heartsInterval = setInterval(spawnHeart, 200);
-      open = true;
-    } else {
-      msg.style.display = "none";
-      clearInterval(heartsInterval);
-      open = false;
-    }
-  };
 </script>
 
 </body>
